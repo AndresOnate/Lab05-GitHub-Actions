@@ -1,0 +1,34 @@
+name: Deploy to Tomcat
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install Java
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+
+    - name: Install Tomcat
+      run: sudo apt-get install tomcat9
+
+    - name: Build with Maven
+      run: mvn package
+
+    - name: Deploy to Tomcat
+      run: sudo cp target/*.war /var/lib/tomcat9/webapps/
+
+    - name: Start Tomcat
+      run: sudo systemctl start tomcat9
+
+
+
+
